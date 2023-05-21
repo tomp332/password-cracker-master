@@ -9,7 +9,7 @@ from password_cracker_master.server.routes.password_routes.utils import load_pas
 passwords_router = APIRouter(prefix="/api/passwords")
 
 
-@passwords_router.post("/upload", response_model=UploadFileResponse)
+@passwords_router.post("/upload", response_model=UploadFileResponse, summary="Upload a file with password hashes")
 async def create_upload_file(file: Annotated[UploadFile, File(description="Password hashes to be cracked")]):
     try:
         # check the content type (MIME type)

@@ -31,9 +31,7 @@ class FrameworkDB:
                            f"{mongo_config.host}:{mongo_config.port}"
         self.client: motor.AsyncIOMotorClient = motor.motor_asyncio.AsyncIOMotorClient(self.db_url)
         self.db = self.client.password_cracker
+
         # Collection objects
         self.passwords_collection: Collection = self.db.get_collection("passwords_collection")
-
-    # async def establish_connection(self):
-    #     p = await self.client.list_database_names()
-    #     print(p)
+        self.tasks_collection: Collection = self.db.get_collection("tasks_collection")

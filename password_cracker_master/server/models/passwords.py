@@ -5,11 +5,10 @@ from bson import ObjectId
 from pydantic import BaseModel, Field, validator
 
 
-class PasswordSchema(BaseModel):
+class PasswordModel(BaseModel):
     """
-    PasswordSchema is the model for the password to be cracked
+    PasswordModel is the model for the password to be cracked
     """
-    # id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     password_hash: str = Field(...)
     password_plaintext: str = ""
     password_cracked: bool = Field(default=False)

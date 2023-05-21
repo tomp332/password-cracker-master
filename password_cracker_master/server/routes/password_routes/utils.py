@@ -2,15 +2,18 @@ from uvicorn.main import logger
 
 from password_cracker_master import master_context
 from password_cracker_master.server.db.db_api.passwords import add_password_hash
+from password_cracker_master.server.db.db_api.tasks import add_new_task
 from password_cracker_master.server.models.responses import UploadFileResponse
+from password_cracker_master.server.models.tasks import TasksModel
 
 
 def large_file_reader(file_name) -> str:
     """
     Read a large file line by line
     """
+    logger.debug(f"Reading file: {file_name}, size: {file_name.stat().st_size}")
     for password in open(file_name, "r"):
-        yield password
+        yield f'{password}'.strip().replace('\n', '').replace('\r', '')
 
 
 async def load_passwords_from_file(file_response_model: UploadFileResponse):
@@ -23,3 +26,8 @@ async def load_passwords_from_file(file_response_model: UploadFileResponse):
         logger.debug(f"Loaded password from file: {password_hash}")
         # Load password to DB
         await add_password_hash(password_hash=password_hash, crack_task_id=file_response_model.crack_task_id)
+        # Create a task for the current password hash for future cracking
+        await add_new_task(task=TasksModel(crack_task_id=file_response_model.crack_task_id,
+                                           minion_server_attacked=[],
+                                           password_hash=password_hash))
+        logger.info(f"Added password hash to DB: {password_hash}")

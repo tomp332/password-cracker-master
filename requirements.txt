@@ -10,6 +10,9 @@ colorama==0.4.6 ; python_version >= "3.10" and python_version < "4.0" and platfo
 dnspython==2.3.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:224e32b03eb46be70e12ef6d64e0be123a64e621ab4c0822ff6d450d52a540b9 \
     --hash=sha256:89141536394f909066cabd112e3e1a37e4e654db00a25308b0f130bc3152eb46
+fastapi-paginate==0.1.0 ; python_version >= "3.10" and python_version < "4.0" \
+    --hash=sha256:4f1928d7993f67d5f215b5b1d71b59a82dc53ef1f10123daa4882801756bc63a \
+    --hash=sha256:f24c3b3e03b92c3165eb8a2f26efd41ad78a8117e7d0525460405fd9f48a5b2e
 fastapi==0.95.2 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:4d9d3e8c71c73f11874bcf5e33626258d143252e329a01002f767306c64fb982 \
     --hash=sha256:d374dbc4ef2ad9b803899bd3360d34c534adc574546e25314ab72c0c4411749f
