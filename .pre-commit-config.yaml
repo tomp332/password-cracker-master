@@ -1,0 +1,9 @@
+fail_fast: true
+repos:
+  - repo: local
+    hooks:
+      - id: poetry export
+        name: poetry-export
+        entry: poetry export -f requirements.txt --output requirements.txt
+        language: system
+        pass_filenames: false
