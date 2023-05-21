@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "password-cracker"
+version = "0.1.0"
+description = "Password cracker"
+authors = ["TomP <tomp12@protonmail.com>"]
+readme = "README.md"
+packages = [
+    {include = "password_cracker"},
+    {include = "password_cracker/metadata/*"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^1.10.7"
+fastapi = "^0.95.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
