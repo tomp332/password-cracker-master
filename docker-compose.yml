@@ -6,21 +6,21 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - 8080:8081
+      - 8081:8081
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
-      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@cracker-db:27017/
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      - ME_CONFIG_MONGODB_URL=mongodb://root:root@cracker-db:27017/
     depends_on:
         - cracker-db
 
   cracker-db:
     image: mongo
-    restart: always
+    restart: unless-stopped
     environment:
-      - "MONGO_INITDB_ROOT_USERNAME: admin"
-      - "MONGO_INITDB_ROOT_PASSWORD: admin"
-      - "MONGO_INITDB_DATABASE : cracker"
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=password_cracker
     ports:
         - 27017:27017
     volumes:

@@ -1,1 +1,1 @@
-# brute-frocer
+# Master Password Cracker Server
