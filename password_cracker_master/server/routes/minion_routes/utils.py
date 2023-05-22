@@ -1,5 +1,6 @@
 from typing import List
 
+import requests.exceptions
 from gridfs import GridOut
 from requests import post, Response
 from uvicorn.main import logger
@@ -10,7 +11,7 @@ from password_cracker_master.server.db.db_api.files import fetch_file_info
 from password_cracker_master.server.db.db_api.minions import get_all_online_minions, update_minion_information
 from password_cracker_master.server.db.db_api.passwords import update_password_information
 from password_cracker_master.server.models.minions_models import MinionFinishedTaskModel, MinionsModel, \
-    UpdateMinionModel
+    NotifyMinionModel, UpdateMinionModel
 from password_cracker_master.server.models.passwords_models import UpdatePasswordModel
 
 
@@ -51,7 +52,7 @@ async def handle_finished_crack_logic(finished_task_model: MinionFinishedTaskMod
     await update_password_information(password_hash=finished_task_model.hashed_password,
                                       updated_data=UpdatePasswordModel(**finished_task_model.dict()))
     # Stop all minions
-    # TODO: Implement this
+    await notify_all_minions()
 
 
 async def notify_all_minions():
@@ -62,14 +63,18 @@ async def notify_all_minions():
     while online_minions := await get_all_online_minions(limit=20):
         for minion in online_minions:
             current_minion: MinionsModel = MinionsModel(**minion)
-            # Send the minion a notification to stop working
-            response: Response = post(
-                url=f"http://{current_minion.minion_hostname}:{master_context.main_settings.minions_rest_port}/api/kill")
-            if response.status_code != 200:
-                logger.error(
-                    f"Failed to notify minion {current_minion.minion_hostname} to stop working, response: {response.json()}")
-            else:
-                logger.info(f"Successfully notified minion {current_minion.minion_hostname} to stop working")
+            try:
+                # Send the minion a notification to stop working
+                response: Response = post(
+                    url=f"http://{current_minion.minion_hostname}:{master_context.main_settings.minions_rest_port}/api/kill",
+                    json=NotifyMinionModel(password_hash=current_minion.current_password_hash).json())
+                if response.status_code != 200:
+                    logger.error(
+                        f"Failed to notify minion {current_minion.minion_hostname} to stop working, response: {response.json()}")
+                else:
+                    logger.info(f"Successfully notified minion {current_minion.minion_hostname} to stop working")
+            except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError) as e:
+                logger.error(f"Failed to notify all minions, error: {e}")
                 # Update minion status to offline
                 await update_minion_information(minion_id=current_minion.minion_id,
                                                 updated_data=UpdateMinionModel(status=StatusEnum.OFFLINE))

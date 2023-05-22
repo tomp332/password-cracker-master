@@ -87,3 +87,10 @@ class MinionFinishedTaskModel(BaseModel):
     password_plaintext: str = Field(...)
     crack_task_id: str = Field(...)
     password_cracked: bool = Field(default=True)
+
+
+class NotifyMinionModel(BaseModel):
+    """
+    NotifyMinionModel is the model for the notification that is sent to the minion server
+    """
+    password_hash: str = Field(...)
