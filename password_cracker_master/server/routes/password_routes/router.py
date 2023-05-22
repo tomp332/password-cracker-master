@@ -1,5 +1,4 @@
 from fastapi import APIRouter, UploadFile, HTTPException, BackgroundTasks
-from starlette.requests import Request
 
 from password_cracker_master.schemas.responses import UploadFileResponse
 from password_cracker_master.server.routes.password_routes.utils import load_passwords_from_file, generate_hash, \
@@ -8,8 +7,10 @@ from password_cracker_master.server.routes.password_routes.utils import load_pas
 passwords_router = APIRouter(prefix="/api/passwords")
 
 
-@passwords_router.post('/upload', response_model=UploadFileResponse, summary="Upload a file_obj with password hashes")
-async def upload(request: Request, file: UploadFile, background_tasks: BackgroundTasks):
+@passwords_router.post('/upload', response_model=UploadFileResponse,
+                       summary="Upload a file with password hashes to crack",
+                       description="Upload a file with seperated lines of password hashes to crack")
+async def upload(file: UploadFile, background_tasks: BackgroundTasks):
     # check the content type (text type)
     content_type = file.content_type
     if content_type not in ["text/plain"]:

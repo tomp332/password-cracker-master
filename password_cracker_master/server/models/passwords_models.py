@@ -5,7 +5,7 @@ from typing import Optional
 from bson import ObjectId
 from pydantic import BaseModel, Field, validator
 
-from password_cracker_master.server.models.minion_tasks_models import StatusEnum
+from password_cracker_master.schemas.enums import StatusEnum
 
 
 class PasswordModel(BaseModel):
@@ -37,7 +37,7 @@ class UpdatePasswordModel(BaseModel):
     """
     UpdatePasswordModel is the model for updating the password
     """
-    password_hash: Optional[str]
     password_plaintext: Optional[str]
     password_cracked: Optional[bool]
     password_cracked_by: Optional[str]
+    status: Optional[StatusEnum]

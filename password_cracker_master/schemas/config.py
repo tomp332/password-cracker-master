@@ -13,6 +13,7 @@ class MasterBaseSettings(BaseSettings):
     dirlist_path: pathlib.Path = Field(default=pathlib.Path('/data/dictionary.txt'), env='DIRLIST_PATH')
     dirlist_load_chunk_size: int = Field(default=80000, env='DIRLIST_LOAD_CHUNK_SIZE')
     dirlist_load_force: bool = Field(default=False, env='DIRLIST_LOAD_FORCE')
+    dirlist_password_length: int = Field(default=12, env='DIRLIST_PASSWORD_LENGTH')
 
     # Data
     data_dir_path: pathlib.Path = Field(default='/data', env='DATA_DIR_PATH')
@@ -51,7 +52,7 @@ class MinionSettings(BaseSettings):
     Minion settings for framework
     """
     # Minion Settings
-    minion_password_limit: int = Field(default=500, env='MINION_PASSWORD_LIMIT')
+    minions_rest_port: int = Field(default=5000, env='MINIONS_REST_PORT')
 
 
 class MainMasterSettings(DbSettings, MasterBaseSettings, MinionSettings):

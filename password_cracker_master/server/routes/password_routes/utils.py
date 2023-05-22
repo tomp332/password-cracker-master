@@ -8,7 +8,7 @@ from password_cracker_master import master_context
 from password_cracker_master.server.db.db_api.passwords import add_password_hash
 from password_cracker_master.server.db.db_api.tasks import add_new_minion_task
 from password_cracker_master.schemas.errors import FrameworkError, FrameworkErrorCodesEnum
-from password_cracker_master.server.models.minion_tasks_models import MinionTasksModel
+from password_cracker_master.server.models.minions_models import MinionTasksModel
 
 
 def read_fs_file(file_hash: str) -> str:

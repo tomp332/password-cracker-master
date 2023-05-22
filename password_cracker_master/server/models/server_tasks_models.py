@@ -3,7 +3,7 @@ import datetime
 from bson import ObjectId
 from pydantic import BaseModel, Field
 
-from password_cracker_master.server.models.minion_tasks_models import StatusEnum
+from password_cracker_master.schemas.enums import StatusEnum
 
 
 class MinionTasksModel(BaseModel):

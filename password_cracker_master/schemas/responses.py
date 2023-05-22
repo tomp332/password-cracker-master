@@ -14,10 +14,17 @@ class UploadFileResponse(BaseModel):
     crack_task_id: str = Field(default=f'{uuid.uuid4()}', description="The ID of the crack task")
 
 
+class MinionNewTaskResponse(BaseModel):
+    """
+    MinionNewTaskResponse is the model for the response from the minion server
+    """
+    password: str = ""
+    crack_task_id: str = ""
+    crack_hash_range: List[str] = []
+
+
 class MinionSignUpResponse(BaseModel):
     """
     MinionSignUpResponse is the model for the response from the minion server
     """
-    password: str = Field(default="")
-    crack_hash_range: List[str] = []
-    crack_task_id: str = ""
+    minion_id: str
