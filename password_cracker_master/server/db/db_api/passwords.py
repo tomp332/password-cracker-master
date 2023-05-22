@@ -1,7 +1,7 @@
 from typing import List
 
 from password_cracker_master import master_context
-from password_cracker_master.server.models.passwords import PasswordModel
+from password_cracker_master.server.models.passwords_models import PasswordModel
 
 
 async def retrieve_passwords() -> List[PasswordModel]:

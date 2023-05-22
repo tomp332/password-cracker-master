@@ -5,8 +5,8 @@ from starlette import status
 from uvicorn.main import logger
 
 from password_cracker_master import master_context
-from password_cracker_master.server.models.minion_tasks import StatusEnum
-from password_cracker_master.server.models.responses import MinionSignUpResponse
+from password_cracker_master.schemas.responses import MinionSignUpResponse
+from password_cracker_master.server.models.minion_tasks_models import StatusEnum
 from password_cracker_master.server.routes.minion_routes.utils import fetch_dirlist_range
 
 minion_router = APIRouter(prefix="/api/minion")
@@ -31,7 +31,8 @@ async def minion_signup(limit: int, minion_id: str, minion_hostname: str, respon
         hash_range: List[str] = await fetch_dirlist_range(skip=master_context.current_dirlist_cursor_index,
                                                           limit=limit)
         # Update the current hashed password to be cracked
-        master_context.current_dirlist_cursor_index += len(hash_range)
+        await master_context.set_current_dirlist_cursor_index(
+            new_value=master_context.current_dirlist_cursor_index + len(hash_range))
         logger.info(f"Minion signup successful, minion_id: {minion_id}, range_size: {len(hash_range)}")
         return MinionSignUpResponse(crack_task_id=password_obj.get("crack_task_id"), crack_hash_range=hash_range,
                                     password=password_obj.get("password_hash"))
@@ -39,4 +40,7 @@ async def minion_signup(limit: int, minion_id: str, minion_hostname: str, respon
 
 @minion_router.post("/cracked", summary="Minion submit cracked password")
 async def minion_cracked_password():
+    # Need to implement
+    # Need to start a new brute force
+    master_context.set_current_dirlist_cursor_index(new_value=0)
     pass

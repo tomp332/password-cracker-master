@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter
 
 from password_cracker_master.server.db.db_api.tasks import get_all_tasks
-from password_cracker_master.server.models.minion_tasks import MinionTasksModel
+from password_cracker_master.server.models.minion_tasks_models import MinionTasksModel
 
 tasks_router = APIRouter(prefix="/api/tasks")
 

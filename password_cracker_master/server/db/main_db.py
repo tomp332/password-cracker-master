@@ -38,4 +38,5 @@ class FrameworkDB:
         self.passwords_collection: Collection = self.db.get_collection("passwords_collection")
         self.tasks_collection: Collection = self.db.get_collection("tasks_collection")
         self.minion_signup_collection: Collection = self.db.get_collection("minions_collection")
-        self.fs_chunks: Collection = self.db.get_collection("fs.chunks")
+        self.dirlist_context_collection: Collection = self.db.get_collection("dirlist_context_collection")
+

@@ -1,26 +1,11 @@
 import asyncio
-from typing import List, Optional
+from typing import Optional
 
 from uvicorn.main import logger
 
 from password_cracker_master import master_context
-from password_cracker_master.server.db.db_api.minion_signups import get_minion_signups
-from password_cracker_master.server.models.minion_signup import MinionSignUpsModel
-from password_cracker_master.server.models.minion_tasks import StatusEnum
+from password_cracker_master.server.db.db_api.dirlist_context import get_current_seek, add_current_seek
 from password_cracker_master.server.routes.password_routes.utils import upload_file_grid, generate_hash
-
-
-async def validate_minion_signups():
-    """
-    validate_minion_signups validates the minion signups in the database
-    """
-    minion_requests_to_be_handled: List[MinionSignUpsModel] = await get_minion_signups(limit=20,
-                                                                                       find_filter={
-                                                                                           "state": StatusEnum.ACCEPTED},
-                                                                                       sort_filter={"timestamp": -1})
-    while minion_requests_to_be_handled:
-        for minion_request in minion_requests_to_be_handled:
-            pass
 
 
 async def startup_actions():
@@ -28,6 +13,15 @@ async def startup_actions():
     startup_actions is a function that is called on startup of the server
     """
     await load_dirlist_file()
+    # Handle dirlist seek pointer
+    current_seek, seek_id = await get_current_seek()
+    if not seek_id:
+        master_context.current_dirlist_cursor_id = await add_current_seek(
+            current_seek=master_context.current_dirlist_cursor_index)
+    else:
+        # Need to restore the seek pointer and seek ID from the database
+        master_context.current_dirlist_cursor_id = seek_id
+        await master_context.set_current_dirlist_cursor_index(new_value=current_seek)
 
 
 async def load_dirlist_file():

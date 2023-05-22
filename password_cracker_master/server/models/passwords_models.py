@@ -5,7 +5,7 @@ from typing import Optional
 from bson import ObjectId
 from pydantic import BaseModel, Field, validator
 
-from password_cracker_master.server.models.minion_tasks import StatusEnum
+from password_cracker_master.server.models.minion_tasks_models import StatusEnum
 
 
 class PasswordModel(BaseModel):

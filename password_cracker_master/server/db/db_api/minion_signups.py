@@ -3,7 +3,7 @@ from typing import List
 from uvicorn.main import logger
 
 from password_cracker_master import master_context
-from password_cracker_master.server.models.minion_signup import MinionSignUpsModel
+from password_cracker_master.server.models.minion_signup_models import MinionSignUpsModel
 
 
 async def get_minion_signups(limit: int, find_filter: dict = None, sort_filter: dict = None, skip: int = 0) -> List[
