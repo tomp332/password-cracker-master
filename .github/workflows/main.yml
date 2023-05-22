@@ -33,6 +33,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{github.actor}}/master-cracker-server:latest
+          tags: ghcr.io/${{ env.MAIN_USER }}/master-cracker-server:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
