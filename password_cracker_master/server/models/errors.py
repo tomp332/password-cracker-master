@@ -9,7 +9,7 @@ class FrameworkErrorCodesEnum(int, Enum):
     Framework error codes
     """
     PASSWORD_FORMAT_ERROR = 1
-
+    DIRLIST_FILE_ERROR = 2
 
 class FrameworkError(HTTPException):
     """

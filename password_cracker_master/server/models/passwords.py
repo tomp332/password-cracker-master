@@ -1,8 +1,11 @@
+import datetime
 import re
 from typing import Optional
 
 from bson import ObjectId
 from pydantic import BaseModel, Field, validator
+
+from password_cracker_master.server.models.minion_tasks import StatusEnum
 
 
 class PasswordModel(BaseModel):
@@ -12,8 +15,10 @@ class PasswordModel(BaseModel):
     password_hash: str = Field(...)
     password_plaintext: str = ""
     password_cracked: bool = Field(default=False)
+    status: StatusEnum = Field(default=StatusEnum.PENDING)
     password_cracked_by: str = Field(default=None)
     crack_task_id: str
+    timestamp: datetime.datetime = datetime.datetime.now()
 
     class Config:
         allow_population_by_field_name = True
@@ -36,7 +41,3 @@ class UpdatePasswordModel(BaseModel):
     password_plaintext: Optional[str]
     password_cracked: Optional[bool]
     password_cracked_by: Optional[str]
-
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}

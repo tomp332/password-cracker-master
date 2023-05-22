@@ -1,8 +1,9 @@
-import motor.motor_asyncio
+import motor
 from bson import ObjectId
+from motor.motor_asyncio import AsyncIOMotorGridFSBucket
 from pymongo.collection import Collection
 
-from password_cracker_master.schemas.db_config import MongoConnectionSchema
+from password_cracker_master.server.db.db_config import MongoConnectionSchema
 
 
 class PyObjectId(ObjectId):
@@ -31,7 +32,10 @@ class FrameworkDB:
                            f"{mongo_config.host}:{mongo_config.port}"
         self.client: motor.AsyncIOMotorClient = motor.motor_asyncio.AsyncIOMotorClient(self.db_url)
         self.db = self.client.password_cracker
+        self.fs = AsyncIOMotorGridFSBucket(self.db)
 
         # Collection objects
         self.passwords_collection: Collection = self.db.get_collection("passwords_collection")
         self.tasks_collection: Collection = self.db.get_collection("tasks_collection")
+        self.minion_signup_collection: Collection = self.db.get_collection("minions_collection")
+        self.fs_chunks: Collection = self.db.get_collection("fs.chunks")

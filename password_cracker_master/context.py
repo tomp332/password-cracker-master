@@ -3,7 +3,7 @@ Singleton class to store global variables
 """
 
 from password_cracker_master.schemas.config import MainMasterSettings
-from password_cracker_master.schemas.db_config import MongoConnectionSchema
+from password_cracker_master.server.db.db_config import MongoConnectionSchema
 from password_cracker_master.server.db.main_db import FrameworkDB
 
 
@@ -20,6 +20,7 @@ class MainContext:
 
         """
         self.main_settings: MainMasterSettings = MainMasterSettings()
+        self.current_dirlist_cursor_index: int = 0
         self.db_object: FrameworkDB = FrameworkDB(
             MongoConnectionSchema(username=self.main_settings.db_user,
                                   password=self.main_settings.db_password,
