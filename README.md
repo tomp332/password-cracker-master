@@ -158,4 +158,7 @@ e9d7645ed586bb8973dee3df02318741
 
 ![image](https://github.com/tomp332/password-cracker-master/assets/47506972/412741bb-78a1-441b-b9a8-23c02f331c7e)
 
+5. An example of all hashes that are decrypted:
+
+![image](https://github.com/tomp332/password-cracker-master/assets/47506972/ba126dea-b170-4563-9f62-7dc2be677c4d)
 
