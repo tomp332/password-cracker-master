@@ -3,7 +3,6 @@ from starlette.middleware.cors import CORSMiddleware
 
 from password_cracker_master.src.routes.minion_routes.router import minion_router
 from password_cracker_master.src.routes.password_routes.router import passwords_router
-from password_cracker_master.src.routes.tasks_routes.router import tasks_router
 from password_cracker_master.src.utils import startup_actions
 
 main_api_router = FastAPI(
@@ -30,5 +29,4 @@ async def on_startup() -> None:
 
 # include routes
 main_api_router.include_router(passwords_router, tags=["Passwords"])
-main_api_router.include_router(tasks_router, tags=["Tasks"])
 main_api_router.include_router(minion_router, tags=["Minions"])

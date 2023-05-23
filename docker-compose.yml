@@ -12,7 +12,7 @@ services:
       - ME_CONFIG_MONGODB_ADMINPASSWORD=root
       - ME_CONFIG_MONGODB_URL=mongodb://root:root@cracker-db:27017/
     depends_on:
-        - cracker-db
+      - cracker-db
 
   cracker-db:
     image: mongo
@@ -22,9 +22,17 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=root
       - MONGO_INITDB_DATABASE=password_cracker
     ports:
-        - 27017:27017
+      - 27017:27017
     volumes:
       - cracker-db:/data/db
+
+  cracker-master:
+    image: ghcr.io/tomp332/password-cracker/master
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./example_data/phone_numbers.txt:/data/dictionary.txt
 
 volumes:
   cracker-db:

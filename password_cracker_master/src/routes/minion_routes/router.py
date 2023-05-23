@@ -64,10 +64,3 @@ async def minion_signup(minion_hostname: str):
 @minion_router.post("/finished", summary="Minion submit cracked password")
 async def minion_cracked_password(finished_task_model: MinionFinishedTaskModel):
     await handle_finished_crack_logic(finished_task_model=finished_task_model)
-
-
-@minion_router.get("/shutdown", summary="Minion shutdown")
-async def minion_shutdown(minion_id: str):
-    # Update minion status to offline
-    await update_minion_information(minion_id=minion_id,
-                                    updated_data=UpdateMinionModel(status=StatusEnum.OFFLINE))
