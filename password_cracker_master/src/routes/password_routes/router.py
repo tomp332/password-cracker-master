@@ -1,10 +1,25 @@
-from fastapi import APIRouter, UploadFile, HTTPException, BackgroundTasks
+from typing import List
 
-from password_cracker_master.schemas.responses import UploadFileResponse
+from fastapi import APIRouter, UploadFile, HTTPException, BackgroundTasks
+from uvicorn.main import logger
+
+from password_cracker_master.schemas.responses import UploadFileResponse, CrackTaskPasswordsResponse
+from password_cracker_master.src.db.db_api.passwords import retrieve_passwords_by_crack_task_id
 from password_cracker_master.src.routes.password_routes.utils import load_passwords_from_file, generate_hash, \
     upload_file_grid
 
 passwords_router = APIRouter(prefix="/api/passwords")
+
+
+@passwords_router.get('/status', response_model=List[CrackTaskPasswordsResponse],
+                      summary="Get the status of the password cracking task", )
+async def status(crack_task_id: str, limit: int = 50):
+    try:
+        logger.debug(f"Fetching crack task status, ID: {crack_task_id}")
+        return await retrieve_passwords_by_crack_task_id(limit=limit, crack_task_id=crack_task_id)
+    except Exception as error:
+        raise HTTPException(status_code=500,
+                            detail=f"Failed to fetch crack task status, ID: {crack_task_id}, error: {error}")
 
 
 @passwords_router.post('/upload', response_model=UploadFileResponse,

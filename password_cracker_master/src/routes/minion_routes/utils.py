@@ -11,10 +11,11 @@ from password_cracker_master.schemas.responses import MinionNewTaskResponse
 from password_cracker_master.src.db.db_api.files import fetch_file_info
 from password_cracker_master.src.db.db_api.minions import get_all_online_minions, update_minion_information
 from password_cracker_master.src.db.db_api.passwords import update_password_information
-from password_cracker_master.src.db.db_api.tasks import add_new_minion_task
+from password_cracker_master.src.db.db_api.tasks import add_new_minion_task, update_task_information
 from password_cracker_master.src.models.minions_models import MinionFinishedTaskModel, MinionsModel, \
     NotifyMinionModel, UpdateMinionModel, CreateMinionTaskModel
 from password_cracker_master.src.models.passwords_models import UpdatePasswordModel
+from password_cracker_master.src.models.server_tasks_models import UpdateMinionTaskModel
 
 
 async def fetch_dirlist_range(skip: int = 0, limit: int = 2) -> List[str]:
@@ -48,21 +49,26 @@ async def handle_finished_crack_logic(finished_task_model: MinionFinishedTaskMod
     """
     Handles the logic for when a minion finishes cracking a password
     """
-    # Need to start a new brute force reset the dirlist seek
-    master_context.set_current_dirlist_cursor_index(new_value=0)
-    # Update the proper information based on the finished task
-    await update_password_information(password_hash=finished_task_model.hashed_password,
-                                      updated_data=UpdatePasswordModel(**finished_task_model.dict()))
+    if finished_task_model.status == StatusEnum.COMPLETED:
+        # Need to start a new brute force reset the dirlist seek
+        await master_context.set_current_dirlist_cursor_index(new_value=0)
+        # Update the proper information based on the finished task
+        await update_password_information(password_hash=finished_task_model.hashed_password,
+                                          updated_data=UpdatePasswordModel(**finished_task_model.dict()))
+        await update_task_information(task_id=finished_task_model.task_id,
+                                      updated_data=UpdateMinionTaskModel(status=StatusEnum.COMPLETED))
     # Stop all minions
-    await notify_all_minions()
+    await notify_all_minions(exclude=[finished_task_model.minion_id])
 
 
-async def notify_all_minions():
+async def notify_all_minions(exclude: List[str] = None):
     """
     Notifies all minions that there is a new password to crack
+
+    :param exclude: A list of minion ids to exclude from the notification
     """
     # Iterate over all online minions and send them a notification to stop working
-    while online_minions := await get_all_online_minions(limit=20):
+    while online_minions := await get_all_online_minions(limit=20, exclude=exclude):
         for minion in online_minions:
             current_minion: MinionsModel = MinionsModel(**minion)
             try:

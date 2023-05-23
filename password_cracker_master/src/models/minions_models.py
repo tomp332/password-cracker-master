@@ -4,6 +4,7 @@ from typing import Optional
 
 from bson import ObjectId
 from pydantic import BaseModel, Field
+from pydantic import validator
 
 from password_cracker_master.schemas.enums import StatusEnum
 
@@ -13,9 +14,13 @@ class CreateMinionModel(BaseModel):
     CreateMinionModel is the model for creating minions
     """
     minion_hostname: str = Field(...)
-    minion_id: str = Field(default=f'{uuid.uuid4()}')
+    minion_id: Optional[str]
     current_password_hash: str = ""
     crack_task_id: str = ""
+
+    @validator("minion_id", pre=True, always=True)
+    def generate_uuid(cls, v):
+        return v or f'{uuid.uuid4()}'
 
 
 class MinionsModel(CreateMinionModel):
@@ -48,7 +53,14 @@ class CreateMinionTaskModel(BaseModel):
     password_hash: str = Field(...)
     minion_id: str = Field(...)
     hash_range_end: int = Field(...)
-    task_id: str = Field(default=f'{uuid.uuid4()}')
+    task_id: Optional[str]
+
+    @validator("task_id", pre=True, always=True)
+    def generate_uuid(cls, v):
+        """
+        generate uuid4
+        """
+        return f'{uuid.uuid4()}'
 
 
 class MinionTasksModel(CreateMinionTaskModel):
@@ -82,9 +94,11 @@ class MinionFinishedTaskModel(BaseModel):
     """
     MinionFinishedTaskModel is the model for the task that is sent to the minion src
     """
-    hashed_password: str = Field(...)
-    password_plaintext: str = Field(...)
-    crack_task_id: str = Field(...)
+    minion_id: str = Field(...)
+    hashed_password: str
+    password_plaintext: str
+    status: StatusEnum = Field(default=StatusEnum.COMPLETED)
+    task_id: str
 
 
 class NotifyMinionModel(BaseModel):

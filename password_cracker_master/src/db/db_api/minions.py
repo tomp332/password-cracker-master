@@ -16,14 +16,20 @@ async def add_minion(new_minion: CreateMinionModel) -> dict:
     return await master_context.db_object.minions_collection.insert_one(MinionsModel(**new_minion.dict()).dict())
 
 
-async def get_all_online_minions(limit: int = 10) -> List[dict]:
+async def get_all_online_minions(limit: int = 10, exclude: List[str] = None) -> List[dict]:
     """
     Get all tasks from the database
 
     :return: List of MinionsModel
     """
+    if exclude is None:
+        exclude = []
     logger.debug(f"Getting all online minions from the database")
-    return await master_context.db_object.minions_collection.find({"status": StatusEnum.ONLINE}).to_list(length=limit)
+    return await master_context.db_object.minions_collection.find(
+        {"status": StatusEnum.ONLINE,
+         'minion_id': {
+             '$nin': exclude
+         }}).to_list(length=limit)
 
 
 async def update_minion_information(minion_id: str, updated_data: UpdateMinionModel) -> dict:

@@ -4,6 +4,7 @@ from uvicorn.main import logger
 
 from password_cracker_master import master_context
 from password_cracker_master.src.models.minions_models import CreateMinionTaskModel, MinionTasksModel
+from password_cracker_master.src.models.server_tasks_models import UpdateMinionTaskModel
 
 
 async def get_all_tasks(skip: int, limit: int) -> List[MinionTasksModel]:
@@ -29,12 +30,13 @@ async def add_new_minion_task(task: CreateMinionTaskModel):
     logger.debug(f"Added new task to the database: {task}")
 
 
-async def write_current_start_range(start_range: int):
+async def update_task_information(task_id: str, updated_data: UpdateMinionTaskModel) -> dict:
     """
-    Write the current start range to the database
+    Update task information in the database
 
-    :param start_range: int
+    :param task_id: Task ID
+    :param updated_data: Updated data
     """
-    logger.debug(f"Writing current start range to the database: {start_range}")
-    await master_context.db_object.tasks_collection.update_one({"_id": "current_start_range"},
-                                                               {"$set": {"start_range": start_range}})
+    logger.debug(f"Updating minion task information in the database, {task_id}:{updated_data.dict()}")
+    return await master_context.db_object.tasks_collection.update_one({"task_id": task_id},
+                                                                      {'$set': updated_data.dict()})

@@ -15,7 +15,6 @@ class PasswordModel(BaseModel):
     password_hash: str = Field(...)
     password_plaintext: str = ""
     status: StatusEnum = Field(default=StatusEnum.PENDING)
-    password_cracked_by: str = Field(default=None)
     crack_task_id: str
     timestamp: datetime.datetime = datetime.datetime.now()
 
@@ -37,5 +36,5 @@ class UpdatePasswordModel(BaseModel):
     UpdatePasswordModel is the model for updating the password
     """
     password_plaintext: Optional[str]
-    password_cracked_by: Optional[str]
-    status: Optional[StatusEnum]
+    minion_id: Optional[str]
+    status: StatusEnum = Field(default=StatusEnum.COMPLETED)

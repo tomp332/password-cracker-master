@@ -3,16 +3,22 @@ from typing import List
 from uvicorn.main import logger
 
 from password_cracker_master import master_context
+from password_cracker_master.schemas.responses import CrackTaskPasswordsResponse
 from password_cracker_master.src.models.passwords_models import PasswordModel, UpdatePasswordModel
 
 
-async def retrieve_passwords() -> List[PasswordModel]:
+async def retrieve_passwords_by_crack_task_id(crack_task_id: str, limit: int = 50) -> List[CrackTaskPasswordsResponse]:
     """
     Retrieve all passwords
 
+    :param crack_task_id: The crack task id
+    :param limit: The length of the list to return
     :return: List of PasswordModel
     """
-    return [p async for p in master_context.db_object.passwords_collection.find()]
+    a = await master_context.db_object.passwords_collection.find({"crack_task_id": crack_task_id}).to_list(
+        length=limit)
+    logger.debug(f"Retrieved passwords from the database, {a}")
+    return [CrackTaskPasswordsResponse(**x) for x in a]
 
 
 async def add_password_hash(password_hash: str, crack_task_id: str) -> List[PasswordModel]:
