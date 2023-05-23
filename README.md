@@ -1,4 +1,4 @@
-# Master Password Cracker Server
+# Password Cracker Project
 
 # Description
 
