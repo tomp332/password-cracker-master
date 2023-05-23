@@ -46,10 +46,9 @@ class CreateMinionTaskModel(BaseModel):
     CreateMinionTaskModelCreateMinionTaskModel is the model for the task that is sent to the minion src
     """
     password_hash: str = Field(...)
-    hash_range_chunk_id: str = Field(default="123")
-    minion_server_hostname: str = Field(default="minion-localhost")
-    minion_server_id: str = Field(default="123")
-    crack_task_id: str = Field(...)
+    minion_id: str = Field(...)
+    hash_range_end: int = Field(...)
+    task_id: str = Field(default=f'{uuid.uuid4()}')
 
 
 class MinionTasksModel(CreateMinionTaskModel):
@@ -86,7 +85,6 @@ class MinionFinishedTaskModel(BaseModel):
     hashed_password: str = Field(...)
     password_plaintext: str = Field(...)
     crack_task_id: str = Field(...)
-    password_cracked: bool = Field(default=True)
 
 
 class NotifyMinionModel(BaseModel):

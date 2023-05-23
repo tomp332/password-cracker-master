@@ -1,4 +1,4 @@
-from typing import Optional, List, Annotated
+from typing import Optional, Annotated
 
 from fastapi import APIRouter, Response, BackgroundTasks, Query
 from starlette import status
@@ -10,7 +10,8 @@ from password_cracker_master.schemas.responses import MinionSignUpResponse, Mini
 from password_cracker_master.src.db.db_api.minions import add_minion, update_minion_information
 from password_cracker_master.src.models.minions_models import CreateMinionModel, UpdateMinionModel, \
     MinionFinishedTaskModel
-from password_cracker_master.src.routes.minion_routes.utils import fetch_dirlist_range, handle_finished_crack_logic
+from password_cracker_master.src.routes.minion_routes.utils import handle_finished_crack_logic, \
+    handle_new_minion_task
 
 minion_router = APIRouter(prefix="/api/minion")
 
@@ -28,21 +29,17 @@ async def minion_fetch_task(limit: Annotated[int, Query(le=100, ge=1)], minion_i
         response.description = "No password to crack"
         return MinionNewTaskResponse()
     else:
-        # Fetch range of dictionary passwords to try
-        hash_range: List[str] = await fetch_dirlist_range(skip=master_context.current_dirlist_cursor_index,
-                                                          limit=limit)
-        # Update the current hashed password to be cracked
-        await master_context.set_current_dirlist_cursor_index(
-            new_value=master_context.current_dirlist_cursor_index + len(hash_range))
-        logger.info(f"Minion signup successful, minion_id: {minion_id}, range_size: {len(hash_range)}")
+        new_task: MinionNewTaskResponse = await handle_new_minion_task(minion_id=minion_id, limit=limit,
+                                                                       password_hash=password_obj.get("password_hash"))
         # Update minion status to processing
         background_tasks.add_task(update_minion_information, minion_id=minion_id,
                                   updated_data=UpdateMinionModel(status=StatusEnum.PROCESSING,
                                                                  current_password_hash=password_obj.get(
                                                                      "password_hash"),
                                                                  crack_task_id=password_obj.get("crack_task_id")))
-        return MinionNewTaskResponse(crack_task_id=password_obj.get("crack_task_id"), crack_hash_range=hash_range,
-                                     password=password_obj.get("password_hash"))
+        logger.info(
+            f"Minion task fetched successfully, minion_id: {minion_id}, range_size: {len(new_task.crack_hash_range)}")
+        return new_task
 
 
 @minion_router.get("/signup", response_model=MinionSignUpResponse, summary="New minion signup")

@@ -1,14 +1,12 @@
-import binascii
 import os
 
+import binascii
 from pydantic import ValidationError
 from uvicorn.main import logger
 
 from password_cracker_master import master_context
-from password_cracker_master.src.db.db_api.passwords import add_password_hash
-from password_cracker_master.src.db.db_api.tasks import add_new_minion_task
 from password_cracker_master.schemas.errors import FrameworkError, FrameworkErrorCodesEnum
-from password_cracker_master.src.models.minions_models import MinionTasksModel
+from password_cracker_master.src.db.db_api.passwords import add_password_hash
 
 
 def read_fs_file(file_hash: str) -> str:
@@ -36,9 +34,6 @@ async def load_passwords_from_file(file_hash: str, crack_task_id: str):
             hashes_data = await hashes_grid_out.read()
             for password_hash in hashes_data.decode().splitlines():
                 await add_password_hash(password_hash=password_hash, crack_task_id=crack_task_id)
-                # Create a task for the current password hash for future cracking
-                await add_new_minion_task(task=MinionTasksModel(crack_task_id=crack_task_id,
-                                                                password_hash=password_hash))
                 logger.debug(f"Added password hash to DB: {password_hash}")
     except ValidationError as e:
         logger.error(f"Error while loading passwords from file_obj: {e}")

@@ -7,11 +7,13 @@ from uvicorn.main import logger
 
 from password_cracker_master import master_context
 from password_cracker_master.schemas.enums import StatusEnum
+from password_cracker_master.schemas.responses import MinionNewTaskResponse
 from password_cracker_master.src.db.db_api.files import fetch_file_info
 from password_cracker_master.src.db.db_api.minions import get_all_online_minions, update_minion_information
 from password_cracker_master.src.db.db_api.passwords import update_password_information
+from password_cracker_master.src.db.db_api.tasks import add_new_minion_task
 from password_cracker_master.src.models.minions_models import MinionFinishedTaskModel, MinionsModel, \
-    NotifyMinionModel, UpdateMinionModel
+    NotifyMinionModel, UpdateMinionModel, CreateMinionTaskModel
 from password_cracker_master.src.models.passwords_models import UpdatePasswordModel
 
 
@@ -33,7 +35,7 @@ async def fetch_dirlist_range(skip: int = 0, limit: int = 2) -> List[str]:
     logger.debug(f"Fetching dirlist range for minion signup, skip: {skip}, limit: {limit}")
     start_position: int = master_context.main_settings.dirlist_password_length * skip
     grid_out.seek(start_position)
-    while data := await grid_out.read(master_context.main_settings.dirlist_password_length) and len(
+    while (data := await grid_out.read(master_context.main_settings.dirlist_password_length)) and len(
             password_hashes) != limit:
         password_hashes.extend(data.decode().splitlines())
     logger.debug(
@@ -78,3 +80,30 @@ async def notify_all_minions():
                 # Update minion status to offline
                 await update_minion_information(minion_id=current_minion.minion_id,
                                                 updated_data=UpdateMinionModel(status=StatusEnum.OFFLINE))
+
+
+async def handle_new_minion_task(minion_id: str, limit: int, password_hash: str) -> MinionNewTaskResponse:
+    """
+    Handles the logic for when a new minion signs up
+
+    :param minion_id: The id of the minion
+    :param limit: The number of dictionary passwords to try
+    :param password_hash: The password hash to crack
+    :return: The new minion task response model
+    """
+    # Fetch range of dictionary passwords to try
+    hash_range: List[str] = await fetch_dirlist_range(skip=master_context.current_dirlist_cursor_index,
+                                                      limit=limit)
+    # Update the current hashed password to be cracked
+    await master_context.set_current_dirlist_cursor_index(
+        new_value=master_context.current_dirlist_cursor_index + len(hash_range))
+    new_minion_task: CreateMinionTaskModel = CreateMinionTaskModel(
+        password_hash=password_hash,
+        minion_id=minion_id,
+        hash_range_end=master_context.current_dirlist_cursor_index,
+    )
+    # Add minion task to DB
+    await add_new_minion_task(task=new_minion_task)
+    # Return the new minion task
+    return MinionNewTaskResponse(task_id=new_minion_task.task_id, crack_hash_range=hash_range,
+                                 password=password_hash)

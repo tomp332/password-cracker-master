@@ -12,7 +12,7 @@ class MinionTasksModel(BaseModel):
     """
     timestamp: datetime.datetime = datetime.datetime.now()
     password_hash: str
-    crack_task_id: str
+    task_id: str
     status: StatusEnum = Field(default=StatusEnum.PENDING)
 
     class Config:
