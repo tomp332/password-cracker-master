@@ -6,6 +6,6 @@ for i in range(100000000):
     numbers.append(number)
 
 # Write the generated phone numbers to a file
-with open("phone_numbers.txt", "w") as file:
+with open("./phone_numbers.txt", "w") as file:
     for number in numbers:
         file.write(number + "\n")
