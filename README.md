@@ -1,12 +1,14 @@
 # Password Cracker Project
+<br>
+<br>
 
-# Description
+## Description
 
 <p> Password brute forcer that uses lightweight minion server in order to preform a brute force on a set of MD5 passwords.</p>
 
 **[Master Server](https://github.com/tomp332/password-cracker-master)** - the main server that manages all minion connections for brute forcing</p>
 **[Minion Server](https://github.com/tomp332/password-cracker-minion)** - the leightweight servers used for cracking</p>
-
+<br>
 # Tutorial
 
 ## Master Server
@@ -30,6 +32,15 @@ with open("./phone_numbers.txt", "w") as file:
 python3 ./generate_numbers.py
 ```
 *Notice: the script will reproduce a phone_numbers.txt file in the current directory*
+
+<p>A valid dirlist file would be in the following format:</p>
+```
+0500000000
+0500000001
+0500000002
+0500000003
+0500000004
+```
 
 2. Copy the following docker-compose file and save it in the current working directory:
 
@@ -88,6 +99,15 @@ Like explained ealier, a **minion server** is a leightweight service that connec
 and obtains tasks for brute forcing.</p>
 All tasks are managed through the **master server** and are uploaded via API, which will be explained in the next section.
 
+### Process
+
+<p> Each minion task that is received from the master server, includes a range of passwords to try and crack with, </p> 
+<p> along with the hashed password that needs to be cracked. </p>
+
+<p> As soon as the minion finishes or was able to crack a certain password, </p>
+<p> it notifies the master server leading to the next password that needs to be cracked or to finish the process </p>
+
+
 ### Run
 
 *Make sure the master server is up and running for this, otherwise the minion will not start.*
@@ -114,6 +134,14 @@ docker run -p 5003:5000 --env MASTER_HOSTNAME=192.168.1.160 ghcr.io/tomp332/pass
 <p> Upload a valid file containing a list of md5 hashes to be cracked ( an example is in the repo under example_data directory).</p>
 
 ![image](https://github.com/tomp332/password-cracker-master/assets/47506972/11e570e8-a11f-4581-8595-ef6ce68ffaac)
+
+*An example of a valid hash list file:*
+
+```bash
+b2834d97374c65c9b8e0e10bb2e5afa0
+437783d8e13e9d668a89c1654cbb904a
+e9d7645ed586bb8973dee3df02318741
+```
 
 2. Save the *crack_task_id* returned from the request, if everything went well, you will need that ID for keeping track of your passwords.
 
