@@ -3,6 +3,7 @@ FROM python:slim
 WORKDIR /app
 
 COPY requirements.txt .
+COPY password_cracker_master ./password_cracker_master
 
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
