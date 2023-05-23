@@ -16,7 +16,7 @@ class UploadFileResponse(BaseModel):
 
 class MinionNewTaskResponse(BaseModel):
     """
-    MinionNewTaskResponse is the model for the response from the minion server
+    MinionNewTaskResponse is the model for the response from the minion src
     """
     password: str = ""
     crack_task_id: str = ""
@@ -25,6 +25,6 @@ class MinionNewTaskResponse(BaseModel):
 
 class MinionSignUpResponse(BaseModel):
     """
-    MinionSignUpResponse is the model for the response from the minion server
+    MinionSignUpResponse is the model for the response from the minion src
     """
     minion_id: str

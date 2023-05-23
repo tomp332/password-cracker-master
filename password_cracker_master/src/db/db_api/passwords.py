@@ -3,7 +3,7 @@ from typing import List
 from uvicorn.main import logger
 
 from password_cracker_master import master_context
-from password_cracker_master.server.models.passwords_models import PasswordModel, UpdatePasswordModel
+from password_cracker_master.src.models.passwords_models import PasswordModel, UpdatePasswordModel
 
 
 async def retrieve_passwords() -> List[PasswordModel]:

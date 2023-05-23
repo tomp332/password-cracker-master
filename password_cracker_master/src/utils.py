@@ -4,13 +4,13 @@ from typing import Optional
 from uvicorn.main import logger
 
 from password_cracker_master import master_context
-from password_cracker_master.server.db.db_api.dirlist_context import get_current_seek, add_current_seek
-from password_cracker_master.server.routes.password_routes.utils import upload_file_grid, generate_hash
+from password_cracker_master.src.db.db_api.dirlist_context import get_current_seek, add_current_seek
+from password_cracker_master.src.routes.password_routes.utils import upload_file_grid, generate_hash
 
 
 async def startup_actions():
     """
-    startup_actions is a function that is called on startup of the server
+    startup_actions is a function that is called on startup of the src
     """
     await load_dirlist_file()
     # Handle dirlist seek pointer

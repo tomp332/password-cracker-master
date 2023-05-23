@@ -3,7 +3,7 @@ from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorGridFSBucket
 from pymongo.collection import Collection
 
-from password_cracker_master.server.db.db_config import MongoConnectionSchema
+from password_cracker_master.src.db.db_config import MongoConnectionSchema
 
 
 class PyObjectId(ObjectId):

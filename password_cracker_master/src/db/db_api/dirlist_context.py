@@ -4,7 +4,7 @@ from pymongo.collection import Collection
 from uvicorn.main import logger
 
 from password_cracker_master import master_context
-from password_cracker_master.server.models.dirlist_models import DirListContextModel
+from password_cracker_master.src.models.dirlist_models import DirListContextModel
 
 
 async def get_current_seek() -> tuple[Optional[int], Optional[str]]:

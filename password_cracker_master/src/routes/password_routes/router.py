@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, HTTPException, BackgroundTasks
 
 from password_cracker_master.schemas.responses import UploadFileResponse
-from password_cracker_master.server.routes.password_routes.utils import load_passwords_from_file, generate_hash, \
+from password_cracker_master.src.routes.password_routes.utils import load_passwords_from_file, generate_hash, \
     upload_file_grid
 
 passwords_router = APIRouter(prefix="/api/passwords")

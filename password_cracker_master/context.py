@@ -6,8 +6,8 @@ from typing import Optional
 from uvicorn.main import logger
 
 from password_cracker_master.schemas.config import MainMasterSettings
-from password_cracker_master.server.db.db_config import MongoConnectionSchema
-from password_cracker_master.server.db.main_db import FrameworkDB
+from password_cracker_master.src.db.db_config import MongoConnectionSchema
+from password_cracker_master.src.db.main_db import FrameworkDB
 
 
 class MainContext:

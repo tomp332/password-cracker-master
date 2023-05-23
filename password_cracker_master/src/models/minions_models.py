@@ -43,7 +43,7 @@ class UpdateMinionModel(BaseModel):
 
 class CreateMinionTaskModel(BaseModel):
     """
-    CreateMinionTaskModelCreateMinionTaskModel is the model for the task that is sent to the minion server
+    CreateMinionTaskModelCreateMinionTaskModel is the model for the task that is sent to the minion src
     """
     password_hash: str = Field(...)
     hash_range_chunk_id: str = Field(default="123")
@@ -81,7 +81,7 @@ class MinionSignUpsModel(BaseModel):
 
 class MinionFinishedTaskModel(BaseModel):
     """
-    MinionFinishedTaskModel is the model for the task that is sent to the minion server
+    MinionFinishedTaskModel is the model for the task that is sent to the minion src
     """
     hashed_password: str = Field(...)
     password_plaintext: str = Field(...)
@@ -91,6 +91,6 @@ class MinionFinishedTaskModel(BaseModel):
 
 class NotifyMinionModel(BaseModel):
     """
-    NotifyMinionModel is the model for the notification that is sent to the minion server
+    NotifyMinionModel is the model for the notification that is sent to the minion src
     """
     password_hash: str = Field(...)

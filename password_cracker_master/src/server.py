@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from password_cracker_master.server.routes.minion_routes.router import minion_router
-from password_cracker_master.server.routes.password_routes.router import passwords_router
-from password_cracker_master.server.routes.tasks_routes.router import tasks_router
-from password_cracker_master.server.utils import startup_actions
+from password_cracker_master.src.routes.minion_routes.router import minion_router
+from password_cracker_master.src.routes.password_routes.router import passwords_router
+from password_cracker_master.src.routes.tasks_routes.router import tasks_router
+from password_cracker_master.src.utils import startup_actions
 
 main_api_router = FastAPI(
     title="Password Cracker API",

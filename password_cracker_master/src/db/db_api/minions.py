@@ -4,7 +4,7 @@ from uvicorn.main import logger
 
 from password_cracker_master import master_context
 from password_cracker_master.schemas.enums import StatusEnum
-from password_cracker_master.server.models.minions_models import CreateMinionModel, MinionsModel, UpdateMinionModel, \
+from password_cracker_master.src.models.minions_models import CreateMinionModel, MinionsModel, UpdateMinionModel, \
     MinionSignUpsModel
 
 

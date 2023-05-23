@@ -7,12 +7,12 @@ from uvicorn.main import logger
 
 from password_cracker_master import master_context
 from password_cracker_master.schemas.enums import StatusEnum
-from password_cracker_master.server.db.db_api.files import fetch_file_info
-from password_cracker_master.server.db.db_api.minions import get_all_online_minions, update_minion_information
-from password_cracker_master.server.db.db_api.passwords import update_password_information
-from password_cracker_master.server.models.minions_models import MinionFinishedTaskModel, MinionsModel, \
+from password_cracker_master.src.db.db_api.files import fetch_file_info
+from password_cracker_master.src.db.db_api.minions import get_all_online_minions, update_minion_information
+from password_cracker_master.src.db.db_api.passwords import update_password_information
+from password_cracker_master.src.models.minions_models import MinionFinishedTaskModel, MinionsModel, \
     NotifyMinionModel, UpdateMinionModel
-from password_cracker_master.server.models.passwords_models import UpdatePasswordModel
+from password_cracker_master.src.models.passwords_models import UpdatePasswordModel
 
 
 async def fetch_dirlist_range(skip: int = 0, limit: int = 2) -> List[str]:

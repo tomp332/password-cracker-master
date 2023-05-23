@@ -7,10 +7,10 @@ from uvicorn.main import logger
 from password_cracker_master import master_context
 from password_cracker_master.schemas.enums import StatusEnum
 from password_cracker_master.schemas.responses import MinionSignUpResponse, MinionNewTaskResponse
-from password_cracker_master.server.db.db_api.minions import add_minion, update_minion_information
-from password_cracker_master.server.models.minions_models import CreateMinionModel, UpdateMinionModel, \
+from password_cracker_master.src.db.db_api.minions import add_minion, update_minion_information
+from password_cracker_master.src.models.minions_models import CreateMinionModel, UpdateMinionModel, \
     MinionFinishedTaskModel
-from password_cracker_master.server.routes.minion_routes.utils import fetch_dirlist_range, handle_finished_crack_logic
+from password_cracker_master.src.routes.minion_routes.utils import fetch_dirlist_range, handle_finished_crack_logic
 
 minion_router = APIRouter(prefix="/api/minion")
 

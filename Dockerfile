@@ -7,5 +7,4 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT 'python -m password_cracker_master'
-
+CMD ["uvicorn", "password_cracker_master.src.server:main_api_router", "--host", "0.0.0.0", "--port", "5000"]

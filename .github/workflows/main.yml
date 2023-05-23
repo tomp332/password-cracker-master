@@ -1,4 +1,4 @@
-name: master-password-server
+name: master-password-src
 on:
   push:
     branches: [ main ]

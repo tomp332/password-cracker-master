@@ -5,11 +5,11 @@ from pydantic import BaseSettings, Field, validator
 
 class MasterBaseSettings(BaseSettings):
     """
-    Master server base settings
+    Master src base settings
     """
     # Framework Settings
-    framework_hostname: str = Field(default='0.0.0.0', env='FRAMEWORK_HOSTNAME')
-    framework_port: int = Field(default=8000, env='FRAMEWORK_PORT')
+    framework_hostname: str = Field(default='localhost', env='FRAMEWORK_HOSTNAME')
+    framework_port: int = Field(default=5001, env='FRAMEWORK_PORT')
     dirlist_path: pathlib.Path = Field(default=pathlib.Path('/data/dictionary.txt'), env='DIRLIST_PATH')
     dirlist_load_chunk_size: int = Field(default=80000, env='DIRLIST_LOAD_CHUNK_SIZE')
     dirlist_load_force: bool = Field(default=False, env='DIRLIST_LOAD_FORCE')
@@ -57,6 +57,6 @@ class MinionSettings(BaseSettings):
 
 class MainMasterSettings(DbSettings, MasterBaseSettings, MinionSettings):
     """
-    Main settings for master server
+    Main settings for master src
     """
     pass
