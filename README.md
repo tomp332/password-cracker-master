@@ -31,9 +31,11 @@ with open("./phone_numbers.txt", "w") as file:
 ```
 python3 ./generate_numbers.py
 ```
+
 *Notice: the script will reproduce a phone_numbers.txt file in the current directory*
 
 <p>A valid dirlist file would be in the following format:</p>
+
 ```
 0500000000
 0500000001
@@ -90,7 +92,7 @@ volumes:
 docker-compose up -d
 ```
 4. Your up and running, this will load the dockerized services for the master server
-  - On startup, the master server loads the dirlist a process which might take a while on the first run.
+  - On startup, the master server loads the dirlist, a process which might take a while on the first run.
   - You can start interaction with the server, but no brute force process will start until the dirlist has been loaded properly.
 
 ## Minion Server
@@ -133,7 +135,8 @@ docker run -p 5003:5000 --env MASTER_HOSTNAME=192.168.1.160 ghcr.io/tomp332/pass
 
 <p> Upload a valid file containing a list of md5 hashes to be cracked ( an example is in the repo under example_data directory).</p>
 
-![image](https://github.com/tomp332/password-cracker-master/assets/47506972/11e570e8-a11f-4581-8595-ef6ce68ffaac)
+![image](https://github.com/tomp332/password-cracker-master/assets/47506972/23fdc217-f9e9-430c-b397-1a039d6e62d2)
+
 
 *An example of a valid hash list file:*
 
@@ -145,13 +148,14 @@ e9d7645ed586bb8973dee3df02318741
 
 2. Save the *crack_task_id* returned from the request, if everything went well, you will need that ID for keeping track of your passwords.
 
-![image](https://github.com/tomp332/password-cracker-master/assets/47506972/34bb52bb-3f4d-4511-a83c-d85214915616)
+![image](https://github.com/tomp332/password-cracker-master/assets/47506972/83af6a51-96b0-4db9-b639-5c8c4059531f)
 
 3. At this point, you can see that your minion servers have received tasks for brute forcing the passwords that have been uploaded.
 
-![image](https://github.com/tomp332/password-cracker-master/assets/47506972/60e1f278-5505-40de-9d9f-2cc4703085f2)
+![image](https://github.com/tomp332/password-cracker-master/assets/47506972/526a36ae-fb2e-4ecc-8d87-e055f1ce6533)
 
 4. You can check the status of all your uploaded hashes in the current file using the api:
 
-![image](https://github.com/tomp332/password-cracker-master/assets/47506972/b43d0ca1-37c3-46cb-aa19-c74e2d707eee)
+![image](https://github.com/tomp332/password-cracker-master/assets/47506972/412741bb-78a1-441b-b9a8-23c02f331c7e)
+
 
